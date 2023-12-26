@@ -1,5 +1,5 @@
+import { appStyles } from '@/styles'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { appStyles } from './utils'
 
 
 const logo = {

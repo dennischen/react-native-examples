@@ -1,7 +1,7 @@
+import { appStyles } from '@/styles'
 import moment from 'moment/moment'
 import { useEffect, useState } from 'react'
-import { Appearance, Platform, StyleSheet, Text, View } from 'react-native'
-import { appStyles } from './utils'
+import { Appearance, Platform, Text, View } from 'react-native'
 
 
 export default function Info() {
