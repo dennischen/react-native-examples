@@ -1,18 +1,8 @@
 import { StyleSheet } from "react-native"
 
-export const styles = StyleSheet.create({
-    hlayout: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-    vlayout: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    }
-})
-
+/**
+ * application styles
+ */
 export const appStyles = StyleSheet.create({
     app: {
         flex: 1,
@@ -25,7 +15,7 @@ export const appStyles = StyleSheet.create({
         borderWidth: 4,
         borderColor: '#00f'
     },
-    page: {
+    screen: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
@@ -37,3 +27,5 @@ export const appStyles = StyleSheet.create({
         width: '100%'
     },
 })
+
+export default appStyles

@@ -1,4 +1,5 @@
-import { appStyles } from '@/styles'
+
+import { appStyles } from '@/appStyles'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 
@@ -21,7 +22,7 @@ export default function Scroll() {
 
     let i = 0
     return (
-        <View style={appStyles.page}>
+        <View style={appStyles.screen}>
             <ScrollView style={styles.scroll}>
                 <Text style={{ fontSize: 96 }}>Scroll me plz</Text>
                 <Image source={logo} />

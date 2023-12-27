@@ -1,4 +1,4 @@
-import { appStyles } from '@/styles'
+import { appStyles } from '@/appStyles'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 
@@ -14,7 +14,7 @@ export default function List() {
 
     let i = 0;
     return (
-        <View style={appStyles.page}>
+        <View style={appStyles.screen}>
             <FlatList style={{width: '100%'}}
                 data={[
                     { name: 'Devin' },

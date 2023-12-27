@@ -1,4 +1,4 @@
-import { appStyles } from '@/styles'
+import { appStyles } from '@/appStyles'
 import moment from 'moment/moment'
 import { useEffect, useState } from 'react'
 import { Appearance, Platform, Text, View } from 'react-native'
@@ -27,7 +27,7 @@ export default function Info() {
     }
 
     return (
-        <View style={appStyles.page}>
+        <View style={appStyles.screen}>
             <Text>Platform {JSON.stringify(platform)}</Text>
             <Text>{moment(time).format()}</Text>
             

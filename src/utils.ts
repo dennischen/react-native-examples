@@ -13,10 +13,18 @@ export const notIos = Platform.OS !== 'ios'
 export const isTv = Platform.isTV
 export const notTv = !Platform.isTV
 
+/**
+ * User could chagne the mode anytime, so, always call to check when rendering
+ * @returns 
+ */
 export function isDark() {
     return 'dark' === Appearance.getColorScheme()
 }
 
+/**
+ * User could chagne the mode anytime, so, always call to check when rendering
+ * @returns 
+ */
 export function isLight() {
     return 'light' === Appearance.getColorScheme()
 }
