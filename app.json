@@ -29,6 +29,9 @@
             // https://github.com/expo/expo/issues/23812
             //'metro' fix process.env.EXPO_PUBLIC_ issue, but doesn't support hotreload, 
             //'metro' also fix require images too
+
+            //https://github.com/expo/expo/issues/23104
+            //fix by add import "@expo/metro-runtime"; in appEntry.sj
             "bundler": "metro"
         }
     }
