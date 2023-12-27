@@ -1,7 +1,7 @@
 {
-  "name": "awesomeproject",
+  "name": "react-native-examples",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "appEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
