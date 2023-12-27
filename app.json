@@ -28,7 +28,8 @@
 
             // https://github.com/expo/expo/issues/23812
             //'metro' fix process.env.EXPO_PUBLIC_ issue, but doesn't support hotreload, 
-            // "bundler": "metro"
+            //'metro' also fix require images too
+            "bundler": "metro"
         }
     }
 }
