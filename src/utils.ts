@@ -1,17 +1,11 @@
 import { Appearance, Platform } from "react-native"
 
 
-export const isWeb = Platform.OS === 'web'
-export const isAndroid = Platform.OS === 'android'
-export const isIos = Platform.OS === 'ios'
+export const web = Platform.OS === 'web'
+export const android = Platform.OS === 'android'
+export const iOS = Platform.OS === 'ios'
 
-export const notWeb = Platform.OS !== 'web'
-export const notAndroid = Platform.OS !== 'android'
-export const notIos = Platform.OS !== 'ios'
-
-
-export const isTv = Platform.isTV
-export const notTv = !Platform.isTV
+export const tv = Platform.isTV
 
 /**
  * User could chagne the mode anytime, so, always call to check when rendering
@@ -29,4 +23,5 @@ export function isLight() {
     return 'light' === Appearance.getColorScheme()
 }
 
+export const select = Platform.select
 

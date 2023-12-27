@@ -2,16 +2,18 @@ import { appStyles } from '@/appStyles'
 import Info from '@/screens/Info'
 import List from '@/screens/List'
 import Scroll from '@/screens/Scroll'
+import Touchable from '@/screens/Touchable'
 import { utilStyles } from '@/utilStyles'
 import { StatusBar } from 'expo-status-bar'
 import { useState } from 'react'
-import { Button, Text, View } from 'react-native'
+import { Button, Pressable, Text, View } from 'react-native'
 
 
 const screens = new Map([
     { name: 'info', title: 'Info', view: () => { return <Info /> } },
     { name: 'scroll', title: 'scroll', view: () => { return <Scroll /> } },
-    { name: 'list', title: 'List', view: () => { return <List /> } }
+    { name: 'list', title: 'List', view: () => { return <List /> } },
+    { name: 'touchable', title: 'Touchable', view: () => { return <Touchable /> } }
 ].map((e) => [e.name, e]))
 
 export default function App() {
