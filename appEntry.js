@@ -5,6 +5,6 @@ import "@expo/metro-runtime";
 
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
 
-import App from './src/apps/App';
+import App from './src/apps/NavigationApp';
 
 registerRootComponent(App);

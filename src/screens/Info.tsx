@@ -1,10 +1,18 @@
 import { appStyles } from '@/appStyles'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import moment from 'moment/moment'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Appearance, Platform, Text, View } from 'react-native'
 
 
-export default function Info() {
+export type InfoProp = {
+} & Partial<NativeStackScreenProps<any>>
+
+export default function Info(prop: InfoProp) {
+    useMemo(() => {
+        console.log("Info>>", prop)
+    }, [prop])
+
 
     const [time, setTime] = useState(new Date())
 
@@ -30,7 +38,7 @@ export default function Info() {
         <View style={appStyles.screen}>
             <Text>Platform {JSON.stringify(platform)}</Text>
             <Text>{moment(time).format()}</Text>
-            
+
         </View>
     )
 }

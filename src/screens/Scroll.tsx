@@ -1,9 +1,10 @@
 
 import { appStyles } from '@/appStyles'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 
-const favicon  = require('@assets/favicon.png')
+const favicon = require('@assets/favicon.png')
 
 const logo = {
     uri: 'https://reactnative.dev/img/tiny_logo.png',
@@ -20,8 +21,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default function Scroll() {
-    
+export type ScrollProp = {} & Partial<NativeStackScreenProps<any>>
+
+export default function Scroll(prop: ScrollProp) {
+    console.log("Scroll>>", prop)
     let i = 0
     return (
         <View style={appStyles.screen}>

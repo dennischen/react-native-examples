@@ -1,5 +1,6 @@
 import { appStyles } from '@/appStyles'
 import { android } from '@/utils'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import {
     Alert,
     StyleSheet,
@@ -25,8 +26,10 @@ const styles = StyleSheet.create({
         color: 'white',
     },
 })
+export type TouchableProp = {} & Partial<NativeStackScreenProps<any>>
 
-export default function Touchable() {
+export default function Touchable(prop: TouchableProp) {
+    console.log("Touchable>>", prop)
 
     const onPressButton = () => {
         Alert.alert('You tapped the button!')

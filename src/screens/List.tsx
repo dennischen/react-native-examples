@@ -1,4 +1,5 @@
 import { appStyles } from '@/appStyles'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 
@@ -10,8 +11,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default function List() {
+export type ListProp = {} & Partial<NativeStackScreenProps<any>>
 
+export default function List(prop: ListProp) {
+    console.log("List>>", prop)
     let i = 0;
     return (
         <View style={appStyles.screen}>
