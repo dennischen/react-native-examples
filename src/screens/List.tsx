@@ -1,4 +1,5 @@
 import { appStyles } from '@/appStyles'
+import RerenderCounter from '@/components/RerenderCounter'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 
@@ -11,14 +12,15 @@ const styles = StyleSheet.create({
     }
 })
 
-export type ListProp = {} & Partial<NativeStackScreenProps<any>>
+export type ListProps = {}
 
-export default function List(prop: ListProp) {
-    console.log("List>>", prop)
-    let i = 0;
+export default function List(props: ListProps & Partial<NativeStackScreenProps<any>>) {
+    // console.log("List>>", props)
+    let i = 0
     return (
         <View style={appStyles.screen}>
-            <FlatList style={{width: '100%'}}
+            <RerenderCounter/>
+            <FlatList style={{ width: '100%' }}
                 data={[
                     { name: 'Devin' },
                     { name: 'Dan' },
@@ -30,7 +32,7 @@ export default function List(prop: ListProp) {
                     { name: 'Jillian' },
                     { name: 'Jimmy' },
                     { name: 'Julie' },
-                    
+
                     { name: 'Devin' },
                     { name: 'Dan' },
                     { name: 'Dominic' },

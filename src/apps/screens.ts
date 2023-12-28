@@ -1,7 +1,9 @@
-import Info, { InfoProp } from '@/screens/Info'
-import List, { ListProp } from '@/screens/List'
-import Scroll, { ScrollProp } from '@/screens/Scroll'
-import Touchable, { TouchableProp } from '@/screens/Touchable'
+import Animation from '@/screens/Animation'
+import Info, { InfoProps } from '@/screens/Info'
+import List, { ListProps } from '@/screens/List'
+import Networking from '@/screens/Networking'
+import Scroll, { ScrollProps } from '@/screens/Scroll'
+import Touchable, { TouchableProps } from '@/screens/Touchable'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 
@@ -12,10 +14,10 @@ export type Screen = {
 }
 
 export type ScreenParamList = {
-    info: InfoProp
-    scroll: ScrollProp
-    list: ListProp
-    touchable: TouchableProp
+    info: InfoProps
+    scroll: ScrollProps
+    list: ListProps
+    touchable: TouchableProps
 }
 
 
@@ -23,7 +25,9 @@ export const screens: Map<string, Screen> = new Map([
     { name: 'info', title: 'Info', component: () => { return Info } },
     { name: 'scroll', title: 'scroll', component: () => { return Scroll } },
     { name: 'list', title: 'List', component: () => { return List } },
-    { name: 'touchable', title: 'Touchable', component: () => { return Touchable } }
+    { name: 'touchable', title: 'Touchable', component: () => { return Touchable } },
+    { name: 'animation', title: 'Animation', component: () => { return Animation } },
+    { name: 'networking', title: 'Networking', component: () => { return Networking } }
 ].map((e) => [e.name, e]))
 
 export default screens

@@ -1,5 +1,6 @@
 
 import { appStyles } from '@/appStyles'
+import RerenderCounter from '@/components/RerenderCounter'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 
@@ -21,13 +22,14 @@ const styles = StyleSheet.create({
     }
 })
 
-export type ScrollProp = {} & Partial<NativeStackScreenProps<any>>
+export type ScrollProps = {}
 
-export default function Scroll(prop: ScrollProp) {
-    console.log("Scroll>>", prop)
+export default function Scroll(props: ScrollProps & Partial<NativeStackScreenProps<any>>) {
+    // console.log("Scroll>>", props)
     let i = 0
     return (
         <View style={appStyles.screen}>
+            <RerenderCounter/>
             <ScrollView style={styles.scroll}>
                 <Text style={{ fontSize: 96 }}>Scroll me plz</Text>
                 <Image source={favicon} />

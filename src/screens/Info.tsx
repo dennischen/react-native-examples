@@ -1,17 +1,20 @@
 import { appStyles } from '@/appStyles'
+import RerenderCounter from '@/components/RerenderCounter'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import moment from 'moment/moment'
 import { useEffect, useMemo, useState } from 'react'
 import { Appearance, Platform, Text, View } from 'react-native'
 
 
-export type InfoProp = {
-} & Partial<NativeStackScreenProps<any>>
+export type InfoProps = {
+} 
 
-export default function Info(prop: InfoProp) {
+export default function Info(props: InfoProps & Partial<NativeStackScreenProps<any>>) {
+
+    //use Memo to prevent rerender log when timeout
     useMemo(() => {
-        console.log("Info>>", prop)
-    }, [prop])
+        // console.log("Info>>", props)
+    }, [props])
 
 
     const [time, setTime] = useState(new Date())
@@ -36,9 +39,9 @@ export default function Info(prop: InfoProp) {
 
     return (
         <View style={appStyles.screen}>
+            <RerenderCounter/>
             <Text>Platform {JSON.stringify(platform)}</Text>
             <Text>{moment(time).format()}</Text>
-
         </View>
     )
 }

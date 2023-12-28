@@ -1,4 +1,5 @@
 import { appStyles } from '@/appStyles'
+import RerenderCounter from '@/components/RerenderCounter'
 import { android } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import {
@@ -26,10 +27,12 @@ const styles = StyleSheet.create({
         color: 'white',
     },
 })
-export type TouchableProp = {} & Partial<NativeStackScreenProps<any>>
+export type TouchableProps = {
 
-export default function Touchable(prop: TouchableProp) {
-    console.log("Touchable>>", prop)
+}
+
+export default function Touchable(props: TouchableProps & Partial<NativeStackScreenProps<any>>) {
+    // console.log("Touchable>>", props)
 
     const onPressButton = () => {
         Alert.alert('You tapped the button!')
@@ -41,6 +44,7 @@ export default function Touchable(prop: TouchableProp) {
 
     return (
         <View style={appStyles.screen}>
+            <RerenderCounter/>
             <TouchableHighlight onPress={onPressButton} underlayColor="#fff0">
                 <View style={styles.button}>
                     <Text style={styles.buttonText}>TouchableHighlight</Text>
