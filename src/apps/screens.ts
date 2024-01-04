@@ -4,9 +4,12 @@ import Info, { InfoProps } from '@/screens/Info'
 import List, { ListProps } from '@/screens/List'
 import Networking from '@/screens/Networking'
 import Scroll, { ScrollProps } from '@/screens/Scroll'
+import ImageScreen from '@/screens/ImageScreen'
 import Touchable, { TouchableProps } from '@/screens/Touchable'
-import { android } from '@/utils'
+import { android, iOS } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import ImageBackgroundScreen from '@/screens/ImageBackgroundScreen'
+import KeyboardAvoiding from '@/screens/KeyboardAvoiding'
 
 
 export type Screen = {
@@ -25,13 +28,19 @@ export type ScreenParamList = {
 export const screenList: Screen[] = [
     { name: 'info', title: 'Info', component: () => { return Info } },
     { name: 'scroll', title: 'scroll', component: () => { return Scroll } },
+    { name: 'image', title: 'Image', component: () => { return ImageScreen } },
+    { name: 'imageBackground', title: 'Image Background', component: () => { return ImageBackgroundScreen } },
     { name: 'list', title: 'List', component: () => { return List } },
     { name: 'touchable', title: 'Touchable', component: () => { return Touchable } },
     { name: 'animation', title: 'Animation', component: () => { return Animation } },
     { name: 'networking', title: 'Networking', component: () => { return Networking } }
 ]
 if (android) {
+    screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return KeyboardAvoiding } })
     screenList.push({ name: 'androidNative', title: 'Android Native', component: () => { return AndroidNative } })
+}
+if (iOS){
+    screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return KeyboardAvoiding } })
 }
 
 export const screens: Map<string, Screen> = new Map(screenList.map((e) => [e.name, e]))

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { StatusBar, StyleSheet } from "react-native"
 
 /**
  * application styles
@@ -13,7 +13,7 @@ export const appStyles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 4,
         borderWidth: 4,
-        borderColor: '#00f'
+        borderColor: '#00f',
     },
     screen: {
         flex: 1,

@@ -1,13 +1,11 @@
 import { appStyles } from '@/appStyles'
 import { utilStyles } from '@/utilStyles'
-import { web } from '@/utils'
 import { NavigationContainer } from '@react-navigation/native'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
 import { Button, Text, View } from 'react-native'
-import App from './App'
 import screens, { ScreenParamList } from './screens'
-import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 type NavboxProps = NativeStackScreenProps<ScreenParamList>
 
@@ -16,7 +14,7 @@ const Stack = createNativeStackNavigator<ScreenParamList>()
 export default function NavigationApp() {
 
     return <NavigationContainer>
-        <StatusBar style='light' translucent={false} />
+        <StatusBar style='light' backgroundColor='#000' translucent={false} />
         <Stack.Navigator initialRouteName={screens.keys().next().value as any} screenOptions={{ headerShown: false }}>
             {new Array(...screens.values()).map((s) => <Stack.Screen
                 key={s.name}
