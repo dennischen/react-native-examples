@@ -1,15 +1,15 @@
-import AndroidNative from '@/screens/AndroidNative'
-import Animation from '@/screens/Animation'
-import Info, { InfoProps } from '@/screens/Info'
-import List, { ListProps } from '@/screens/List'
-import Networking from '@/screens/Networking'
-import Scroll, { ScrollProps } from '@/screens/Scroll'
-import ImageScreen from '@/screens/ImageScreen'
-import Touchable, { TouchableProps } from '@/screens/Touchable'
+import { AndroidNativeScreenProps } from '@/screens/AndroidNativeScreen'
+import { AnimationScreenProps } from '@/screens/AnimationScreen'
+import { ImageBackgroundScreenProps } from '@/screens/ImageBackgroundScreen'
+import { ImageScreenProps } from '@/screens/ImageScreen'
+import { InfoScreenProps } from '@/screens/InfoScreen'
+import { KeyboardAvoidingScreenProps } from '@/screens/KeyboardAvoidingScreen'
+import { ListScreenProps } from '@/screens/ListScreen'
+import { NetworkingScreenProps } from '@/screens/NetworkingScreen'
+import { ScrollScreenProps } from '@/screens/ScrollScreen'
+import { TouchableScreenProps } from '@/screens/TouchableScreen'
 import { android, iOS } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import ImageBackgroundScreen from '@/screens/ImageBackgroundScreen'
-import KeyboardAvoiding from '@/screens/KeyboardAvoiding'
 
 
 export type Screen = {
@@ -19,28 +19,39 @@ export type Screen = {
 }
 
 export type ScreenParamList = {
-    info: InfoProps
-    scroll: ScrollProps
-    list: ListProps
-    touchable: TouchableProps
+    info: InfoScreenProps
+    scroll: ScrollScreenProps
+    image: ImageScreenProps
+    imageBackground: ImageBackgroundScreenProps
+    list: ListScreenProps
+    touchable: TouchableScreenProps
+    animation: AnimationScreenProps
+    networking: NetworkingScreenProps
+    keyboardAvoiding: KeyboardAvoidingScreenProps
+    androidNative: AndroidNativeScreenProps
 }
 
 export const screenList: Screen[] = [
-    { name: 'info', title: 'Info', component: () => { return Info } },
-    { name: 'scroll', title: 'scroll', component: () => { return Scroll } },
-    { name: 'image', title: 'Image', component: () => { return ImageScreen } },
-    { name: 'imageBackground', title: 'Image Background', component: () => { return ImageBackgroundScreen } },
-    { name: 'list', title: 'List', component: () => { return List } },
-    { name: 'touchable', title: 'Touchable', component: () => { return Touchable } },
-    { name: 'animation', title: 'Animation', component: () => { return Animation } },
-    { name: 'networking', title: 'Networking', component: () => { return Networking } }
+    { name: 'info', title: 'Info', component: () => { return require('@/screens/InfoScreen').default } },
+    { name: 'scroll', title: 'scroll', component: () => { return require('@/screens/ScrollScreen').default } },
+    { name: 'image', title: 'Image', component: () => { return require('@/screens/ImageScreen').default } },
+    { name: 'imageBackground', title: 'ImageBackground', component: () => { return require('@/screens/ImageBackgroundScreen').default } },
+    { name: 'list', title: 'List', component: () => { return require('@/screens/ListScreen').default } },
+    { name: 'sectionList', title: 'SectionList', component: () => { return require('@/screens/SectionListScreen').default } },
+    { name: 'touchable', title: 'Touchable', component: () => { return require('@/screens/TouchableScreen').default } },
+    { name: 'animation', title: 'Animation', component: () => { return require('@/screens/AnimationScreen').default } },
+    { name: 'modal', title: 'Modal', component: () => { return require('@/screens/ModalScreen').default } },
+    { name: 'statusBar', title: 'StatusBar', component: () => { return require('@/screens/StatusBarScreen').default } },
+    { name: 'networking', title: 'Networking', component: () => { return require('@/screens/NetworkingScreen').default } }
 ]
+
+if (android || iOS){//no web
+    screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return require('@/screens/KeyboardAvoidingScreen').default } })
+}
 if (android) {
-    screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return KeyboardAvoiding } })
-    screenList.push({ name: 'androidNative', title: 'Android Native', component: () => { return AndroidNative } })
+    screenList.push({ name: 'androidNative', title: 'Android Native', component: () => { return require('@/screens/AndroidNativeScreen').default } })
 }
 if (iOS){
-    screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return KeyboardAvoiding } })
 }
 
 export const screens: Map<string, Screen> = new Map(screenList.map((e) => [e.name, e]))

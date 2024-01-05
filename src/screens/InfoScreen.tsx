@@ -6,10 +6,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Appearance, Platform, Text, View } from 'react-native'
 
 
-export type InfoProps = {
+export type InfoScreenProps = {
 } 
 
-export default function Info(props: InfoProps & Partial<NativeStackScreenProps<any>>) {
+export default function Info(props: InfoScreenProps & Partial<NativeStackScreenProps<any>>) {
 
     //use Memo to prevent rerender log when timeout
     useMemo(() => {
@@ -47,3 +47,4 @@ export default function Info(props: InfoProps & Partial<NativeStackScreenProps<a
 }
 
 
+console.log(">>>>Loaded InfoScreen")

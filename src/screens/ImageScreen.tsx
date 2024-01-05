@@ -101,3 +101,4 @@ export default function ImageScreen(props: ImageScreenProps & Partial<NativeStac
 }
 
 
+console.log(">>>>Loaded ImageScreen")

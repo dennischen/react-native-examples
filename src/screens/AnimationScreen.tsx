@@ -17,10 +17,10 @@ import {
 
 
 
-export type AnimationProps = {
+export type AnimationScreenProps = {
 }
 
-export default function Animation(props: AnimationProps & Partial<NativeStackScreenProps<{}>>) {
+export default function AnimationScreen(props: AnimationScreenProps & Partial<NativeStackScreenProps<{}>>) {
     // console.log("Animation>>", props)
 
     const images = new Array(6).fill(
@@ -257,3 +257,4 @@ function PanResponderView({ }: PanResponderViewProps) {
     )
 }
 
+console.log(">>>>Loaded AnimationScreen")

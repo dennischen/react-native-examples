@@ -2,7 +2,8 @@
 import { appStyles } from '@/appStyles'
 import RerenderCounter from '@/components/RerenderCounter'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useCallback, useState } from 'react'
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 
 const favicon = require('@assets/favicon.png')
@@ -22,15 +23,25 @@ const styles = StyleSheet.create({
     }
 })
 
-export type ScrollProps = {}
+export type ScrollScreenProps = {}
 
-export default function Scroll(props: ScrollProps & Partial<NativeStackScreenProps<any>>) {
+export default function ScrollScreen(props: ScrollScreenProps & Partial<NativeStackScreenProps<any>>) {
     // console.log("Scroll>>", props)
-    let i = 0
+    const [refreshing, setRefreshing] = useState(false)
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        setTimeout(() => {
+            setRefreshing(false)
+        }, 2000)
+    }, [])
+
     return (
         <View style={appStyles.screen}>
-            <RerenderCounter/>
-            <ScrollView style={styles.scroll}>
+            <RerenderCounter />
+            <ScrollView style={styles.scroll} refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
                 <Text style={{ fontSize: 96 }}>Scroll me plz</Text>
                 <Image source={favicon} />
                 <Image source={logo} />
@@ -68,3 +79,4 @@ export default function Scroll(props: ScrollProps & Partial<NativeStackScreenPro
 }
 
 
+console.log(">>>>Loaded ScrollScreen")

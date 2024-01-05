@@ -90,3 +90,4 @@ export default function ImageBackgroundScreen(props: ImageBackgroundScreenProps 
 }
 
 
+console.log(">>>>Loaded ImageBackgroundScreen")

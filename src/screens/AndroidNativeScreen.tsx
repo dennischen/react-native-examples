@@ -8,10 +8,10 @@ import { Alert, Button, NativeEventEmitter, View } from 'react-native'
 
 
 
-export type AndroidModuleProps = {
+export type AndroidNativeScreenProps = {
 }
 
-export default function AndroidNative(props: AndroidModuleProps & Partial<NativeStackScreenProps<any>>) {
+export default function AndroidNativeScreen(props: AndroidNativeScreenProps & Partial<NativeStackScreenProps<any>>) {
 
     const onPress = () => {
         const constants = CalendarModule.getConstants()
@@ -90,3 +90,4 @@ export default function AndroidNative(props: AndroidModuleProps & Partial<Native
 }
 
 
+console.log(">>>>Loaded AndroidNativeScreen")

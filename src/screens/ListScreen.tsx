@@ -1,8 +1,8 @@
 import { appStyles } from '@/appStyles'
 import RerenderCounter from '@/components/RerenderCounter'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useState } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useCallback, useState } from 'react'
+import { FlatList, Pressable, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 
 const styles = StyleSheet.create({
@@ -74,10 +74,19 @@ const data = [
     { id: `_${++nextId}`, name: 'Julie' },
 ]
 
-export type ListProps = {}
+export type ListScreenProps = {}
 
-export default function List(props: ListProps & Partial<NativeStackScreenProps<any>>) {
+export default function ListScreen(props: ListScreenProps & Partial<NativeStackScreenProps<any>>) {
     // console.log("List>>", props)
+
+    const [refreshing, setRefreshing] = useState(false)
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        setTimeout(() => {
+            setRefreshing(false)
+        }, 2000)
+    }, [])
 
     const [selectedId, setSelectedId] = useState<string>()
 
@@ -90,23 +99,30 @@ export default function List(props: ListProps & Partial<NativeStackScreenProps<a
             <FlatList style={styles.list}
                 data={data}
                 renderItem={({ item }) => {
-                    return <View key={item.id} style={styles.item}>
+                    return <View style={styles.item}>
                         <Text style={styles.text}>{item.name}</Text>
                     </View>
                 }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
             />
             <Text>Selectable List {selectedItem && ` : ${selectedItem.name}` }</Text>
             <FlatList style={styles.list}
                 data={data}
-                renderItem={({ item, index }) => {
+                renderItem={({ item }) => {
                     const selected = item.id === selectedId
-                    return <TouchableOpacity key={index} style={[styles.item, selected && styles.itemSelected]} onPress={() => { setSelectedId(item.id) }} >
+                    return <TouchableOpacity style={[styles.item, selected && styles.itemSelected]} onPress={() => { setSelectedId(item.id) }} >
                         <Text style={[styles.text, selected && styles.textSelected]}>{item.name}</Text>
                     </TouchableOpacity >
                 }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
             />
         </View>
     )
 }
 
 
+console.log(">>>>Loaded ListScreen")

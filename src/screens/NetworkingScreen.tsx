@@ -11,10 +11,10 @@ type Movie = {
     title: string
     releaseYear: string
 }
-export type NetworkingProps = {}
+export type NetworkingScreenProps = {}
 
-export default function Networking(props: NetworkingProps & Partial<NativeStackScreenProps<any>>) {
-    console.log("Networking>>", props)
+export default function NetworkingScreen(props: NetworkingScreenProps & Partial<NativeStackScreenProps<any>>) {
+    // console.log("Networking>>", props)
 
     const [isLoading, setLoading] = useState(true)
     const [data, setData] = useState<Movie[]>([])
@@ -56,4 +56,4 @@ export default function Networking(props: NetworkingProps & Partial<NativeStackS
     )
 }
 
-
+console.log(">>>>Loaded NetworkingScreen")

@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
         color: 'white',
     },
 })
-export type TouchableProps = {
+export type TouchableScreenProps = {
 
 }
 
-export default function Touchable(props: TouchableProps & Partial<NativeStackScreenProps<any>>) {
+export default function TouchableScreen(props: TouchableScreenProps & Partial<NativeStackScreenProps<any>>) {
     // console.log("Touchable>>", props)
 
     const onPressButton = () => {
@@ -83,3 +83,5 @@ export default function Touchable(props: TouchableProps & Partial<NativeStackScr
     )
 }
 
+
+console.log(">>>>Loaded TouchableScreen")

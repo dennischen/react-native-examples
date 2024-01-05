@@ -17,7 +17,7 @@ export default function App() {
             <StatusBar style='light' backgroundColor='#000' translucent={false} />
             <Text>{appName} : Screen : {screens.get(screen)?.title}</Text>
             <View style={[utilStyles.hlayout, { padding: 4, gap: 4, flexWrap: 'wrap' }]}>
-                {new Array(...screens.values()).map((e) => <Button key={e.name} title={e.title} onPress={() => { setScreen(e.name) }} />)}
+                {new Array(...screens.values()).map((e) => <Button title={e.title} onPress={() => { setScreen(e.name) }} />)}
             </View>
             {(()=>{
                 const CO = screens.get(screen)?.component()
