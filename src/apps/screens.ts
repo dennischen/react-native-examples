@@ -38,6 +38,7 @@ export const screenList: Screen[] = [
     { name: 'imageBackground', title: 'ImageBackground', component: () => { return require('@/screens/ImageBackgroundScreen').default } },
     { name: 'list', title: 'List', component: () => { return require('@/screens/ListScreen').default } },
     { name: 'sectionList', title: 'SectionList', component: () => { return require('@/screens/SectionListScreen').default } },
+    { name: 'virtualizedList', title: 'VirtualizedList', component: () => { return require('@/screens/VirtualizedListScreen').default } },
     { name: 'touchable', title: 'Touchable', component: () => { return require('@/screens/TouchableScreen').default } },
     { name: 'animation', title: 'Animation', component: () => { return require('@/screens/AnimationScreen').default } },
     { name: 'modal', title: 'Modal', component: () => { return require('@/screens/ModalScreen').default } },
