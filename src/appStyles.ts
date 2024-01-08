@@ -7,7 +7,7 @@ export const appStyles = StyleSheet.create({
     app: {
         flex: 1,
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'flex-start',
 
         backgroundColor: '#fff',
@@ -17,6 +17,7 @@ export const appStyles = StyleSheet.create({
     },
     screen: {
         flex: 1,
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
 
@@ -24,7 +25,6 @@ export const appStyles = StyleSheet.create({
         padding: 4,
         borderWidth: 4,
         borderColor: '#f0f',
-        width: '100%'
     },
 })
 

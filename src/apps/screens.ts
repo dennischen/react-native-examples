@@ -46,13 +46,22 @@ export const screenList: Screen[] = [
     { name: 'networking', title: 'Networking', component: () => { return require('@/screens/NetworkingScreen').default } }
 ]
 
+
+    
+
 if (android || iOS){//no web
+    //Unable to resolve "react-native-web/dist/exports/DrawerLayoutAndroid"
+    //https://github.com/expo/expo/issues/23322, can't work in build item with web
+    // after switch to react-native-gesture-handler, it can pass the build, but gesture looks like has some bug in web, 
+    // so disable it 
+    screenList.push({ name: 'drawerLayout', title: 'Drawer Layout', component: () => { return require('@/screens/DrawerLayoutScreen').default } })
+
     screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return require('@/screens/KeyboardAvoidingScreen').default } })
 }
-if (android) {
+if (android) {//android only
     screenList.push({ name: 'androidNative', title: 'Android Native', component: () => { return require('@/screens/AndroidNativeScreen').default } })
-}
-if (iOS){
+}else if (iOS){//ios only
+    
 }
 
 export const screens: Map<string, Screen> = new Map(screenList.map((e) => [e.name, e]))
