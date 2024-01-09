@@ -156,18 +156,6 @@ export default function APIScreen(props: APIScreenProps & Partial<NativeStackScr
                     }} title="Unknown" />
                 </View>
                 <View style={[utilStyles.hlayout, { gap: 4 }]}>
-                    <Text>Open</Text>
-                    <Button onPress={() => {
-                        openUrl('https://www.google.com')
-                    }} title="Google" />
-                    <Button onPress={() => {
-                        openUrl('slack://open?team=123456')
-                    }} title="Slack" />
-                    <Button onPress={() => {
-                        openUrl('unknown://nothing')
-                    }} title="Unknown" />
-                </View>
-                <View style={[utilStyles.hlayout, { gap: 4 }]}>
                     <Text>Share</Text>
                     <Button onPress={() => {
                         share('you are so nice')
