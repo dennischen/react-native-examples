@@ -43,7 +43,8 @@ export const screenList: Screen[] = [
     { name: 'animation', title: 'Animation', component: () => { return require('@/screens/AnimationScreen').default } },
     { name: 'modal', title: 'Modal', component: () => { return require('@/screens/ModalScreen').default } },
     { name: 'statusBar', title: 'StatusBar', component: () => { return require('@/screens/StatusBarScreen').default } },
-    { name: 'networking', title: 'Networking', component: () => { return require('@/screens/NetworkingScreen').default } }
+    { name: 'networking', title: 'Networking', component: () => { return require('@/screens/NetworkingScreen').default } },
+    { name: 'api', title: 'API', component: () => { return require('@/screens/APIScreen').default } }
 ]
 
 
@@ -60,6 +61,7 @@ if (android || iOS){//no web
 }
 if (android) {//android only
     screenList.push({ name: 'androidNative', title: 'Android Native', component: () => { return require('@/screens/AndroidNativeScreen').default } })
+    screenList.push({ name: 'androidPermission', title: 'Android Permission', component: () => { return require('@/screens/AndroidPermissionScreen').default } })
 }else if (iOS){//ios only
     
 }

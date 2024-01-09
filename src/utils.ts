@@ -1,4 +1,4 @@
-import { Appearance, Platform } from "react-native"
+import { Appearance, NativeModules, Platform } from "react-native"
 
 
 export const web = Platform.OS === 'web'
@@ -24,4 +24,14 @@ export function isLight() {
 }
 
 export const select = Platform.select
+
+export const deviceLanguage: string | undefined =
+    iOS ?
+        (NativeModules.SettingsManager.settings.AppleLocale ||
+            NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
+        ) : (
+            android
+                ? NativeModules.I18nManager.localeIdentifier
+                : undefined
+        )
 
