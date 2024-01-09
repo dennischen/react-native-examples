@@ -6,24 +6,37 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
 import { Button, Text, View } from 'react-native'
 import screens, { ScreenParamList } from './screens'
+import I18nProvider, { TranslationLoaders } from '@/contexts/I18nProvider'
+import { deviceLanguage } from '@/utils'
 
 type NavboxProps = NativeStackScreenProps<ScreenParamList>
 
 const Stack = createNativeStackNavigator<ScreenParamList>()
 
+
+const translationLoaders: TranslationLoaders = {
+    "en": () => require('@assets/i18n/en.json'),
+    "zh": () => require('@assets/i18n/zh.json'),
+    "zh_CN": () => require('@assets/i18n/zh_CN.json')
+}
+
 export default function NavigationApp() {
 
-    return <NavigationContainer>
-        <StatusBar style='light' backgroundColor='#000' translucent={false} />
-        <Stack.Navigator initialRouteName={screens.keys().next().value as any} screenOptions={{ headerShown: false }}>
-            {new Array(...screens.values()).map((s) => <Stack.Screen
-                key={s.name}
-                name={s.name as any}
-                options={{ title: s.title }}
-                component={Navbox}
-            />)}
-        </Stack.Navigator>
-    </NavigationContainer>
+    const userLanguage = deviceLanguage || 'en'
+
+    return <I18nProvider fallbackLanguage='en' translationLoaders={translationLoaders} language={userLanguage}>
+        <NavigationContainer>
+            <StatusBar style='light' backgroundColor='#000' translucent={false} />
+            <Stack.Navigator initialRouteName={screens.keys().next().value as any} screenOptions={{ headerShown: false }}>
+                {new Array(...screens.values()).map((s) => <Stack.Screen
+                    key={s.name}
+                    name={s.name as any}
+                    options={{ title: s.title }}
+                    component={Navbox}
+                />)}
+            </Stack.Navigator>
+        </NavigationContainer>
+    </I18nProvider>
 }
 
 function Navbox({ navigation, route }: NavboxProps) {

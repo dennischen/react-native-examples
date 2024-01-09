@@ -1,5 +1,6 @@
 import { appStyles } from '@/appStyles'
 import RerenderCounter from '@/components/RerenderCounter'
+import useI18n from '@/contexts/useI18n'
 import utilStyles from '@/utilStyles'
 import { deviceLanguage } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -12,6 +13,8 @@ export type InfoScreenProps = {
 }
 
 export default function Info(props: InfoScreenProps & Partial<NativeStackScreenProps<any>>) {
+
+    const { label: l } = useI18n()
 
     //use Memo to prevent rerender log when timeout
     useMemo(() => {
@@ -43,6 +46,7 @@ export default function Info(props: InfoScreenProps & Partial<NativeStackScreenP
     return (
         <View style={appStyles.screen}>
             <RerenderCounter />
+            <Text>{l('helloReact')}</Text>
             <View style={[utilStyles.vlayout, { backgroundColor: '#aaa7' }]}>
                 {Object.entries(platform).map(([key, value]) => (
                     <Text key={key}>

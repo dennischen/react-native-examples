@@ -44,11 +44,9 @@ export const screenList: Screen[] = [
     { name: 'modal', title: 'Modal', component: () => { return require('@/screens/ModalScreen').default } },
     { name: 'statusBar', title: 'StatusBar', component: () => { return require('@/screens/StatusBarScreen').default } },
     { name: 'networking', title: 'Networking', component: () => { return require('@/screens/NetworkingScreen').default } },
-    { name: 'api', title: 'API', component: () => { return require('@/screens/APIScreen').default } }
+    { name: 'api', title: 'API', component: () => { return require('@/screens/APIScreen').default } },
+    { name: 'i18n', title: 'I18n', component: () => { return require('@/screens/I18nScreen').default } },
 ]
-
-
-    
 
 if (android || iOS){//no web
     //Unable to resolve "react-native-web/dist/exports/DrawerLayoutAndroid"

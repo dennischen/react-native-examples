@@ -1,0 +1,7 @@
+{
+    "helloReact": "哈啰 React",
+    "i18n": {
+        "@": "I18n",
+        "hello": "哈啰 {{who}}"
+    }
+}
