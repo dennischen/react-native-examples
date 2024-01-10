@@ -4,15 +4,18 @@ import { NavigationContainer } from '@react-navigation/native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
-import { Button, Text, View } from 'react-native'
+import { ActivityIndicator, Animated, Button, Text, View } from 'react-native'
 import screens, { ScreenParamList } from './screens'
 import I18nProvider, { TranslationLoaders } from '@/contexts/I18nProvider'
-import { deviceLanguage } from '@/utils'
+import { getDeviceLanguage, web } from '@/utils'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useEffect, useRef, useState } from 'react'
 
 type NavboxProps = NativeStackScreenProps<ScreenParamList>
 
 const Stack = createNativeStackNavigator<ScreenParamList>()
 
+const USER_LANGUAGE = "userLanguage"
 
 const translationLoaders: TranslationLoaders = {
     "en": () => require('@assets/i18n/en.json'),
@@ -22,9 +25,30 @@ const translationLoaders: TranslationLoaders = {
 
 export default function NavigationApp() {
 
-    const userLanguage = deviceLanguage || 'en'
+    const [initLanguage, setInitLanguage] = useState<string | undefined>()
 
-    return <I18nProvider fallbackLanguage='en' translationLoaders={translationLoaders} language={userLanguage}>
+
+    useEffect(() => {
+        (async () => {
+            const userLanguage: string = await AsyncStorage.getItem(USER_LANGUAGE) || getDeviceLanguage() || 'en'
+            setTimeout(()=>{
+                setInitLanguage(userLanguage)
+            },0)//2000 for test load delay
+        })()
+    }, [])
+
+
+
+    // const userLanguage = getDeviceLanguage() || 'en'
+    const onChangeLanguage = (language: string) => {
+
+        AsyncStorage.setItem(USER_LANGUAGE, language)
+        //initLanguage is for async AsyncStorage.getItem
+        //and I18nProvider will update it language, don't need to update 
+        //we don't need to update it
+    }
+
+    return initLanguage ? <I18nProvider fallbackLanguage='en' translationLoaders={translationLoaders} language={initLanguage} onChangeLanguage={onChangeLanguage}>
         <NavigationContainer>
             <StatusBar style='light' backgroundColor='#000' translucent={false} />
             <Stack.Navigator initialRouteName={screens.keys().next().value as any} screenOptions={{ headerShown: false }}>
@@ -36,7 +60,25 @@ export default function NavigationApp() {
                 />)}
             </Stack.Navigator>
         </NavigationContainer>
-    </I18nProvider>
+    </I18nProvider> : <InitLoading />
+}
+
+function InitLoading() {
+    const fadeAnim = useRef(new Animated.Value(0)).current
+    useEffect(() => {
+        Animated.timing(fadeAnim, {
+            delay: 500,
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: !web
+        }).start()
+    })
+    return <View style={[{ flex: 1, alignItems: 'center', justifyContent: 'center' }]}>
+        <StatusBar style='light' backgroundColor='#000' translucent={false} />
+        <Animated.View style={{ opacity: fadeAnim, }}>
+            <ActivityIndicator size="large" />
+        </Animated.View>
+    </View>
 }
 
 function Navbox({ navigation, route }: NavboxProps) {

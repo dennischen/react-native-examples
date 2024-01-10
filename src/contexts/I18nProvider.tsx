@@ -12,12 +12,14 @@ export type I18nProviderProps = {
     translationLoaders: TranslationLoaders
     fallbackLanguage?: string
     i18nextInstance?: I18nextInstance
+    onChangeLanguage?: (language: string) => void
 } & PropsWithChildren
 
 export type I18nContextType = {
     language: string,
+    fallbackLanguage?: string,
     setLanguage: (language: string) => void
-    i18next: I18nextInstance
+    i18nextInstance: I18nextInstance
     label: (key: string, args?: {}) => string
 }
 
@@ -54,7 +56,7 @@ function matchLoader(loaders: TranslationLoaders, language: string) {
             }
         }
     })
-    return trans?.[1]
+    return trans
 }
 
 
@@ -67,9 +69,26 @@ function handleLabel(i18: I18nextInstance, key: string, args: any = {}) {
     return val['@'] || `[key:${key}]`
 }
 
-export default function I18nProvider({ fallbackLanguage, language, translationLoaders, i18nextInstance, children }: I18nProviderProps) {
+export default function I18nProvider({ fallbackLanguage, language, translationLoaders, i18nextInstance, onChangeLanguage, children }: I18nProviderProps) {
 
     const i18next = useMemo(() => {
+        
+        let loaderLang = language
+        let loaderFallbackLang = fallbackLanguage
+
+        const translations = new Map<string, any>()
+
+        let loader = matchLoader(translationLoaders, language)
+        if (loader) {
+            translations.set(loaderLang = loader[0], loader[1]())
+        }
+        if (fallbackLanguage && fallbackLanguage !== language) {
+            loader = matchLoader(translationLoaders, fallbackLanguage)
+            if (loader) {
+                translations.set(loaderFallbackLang = loader[0], loader[1]())
+            }
+        }
+
         const i18next = i18nextInstance || i18nextDefault.createInstance()
 
         if (!i18next.isInitialized) {
@@ -79,8 +98,9 @@ export default function I18nProvider({ fallbackLanguage, language, translationLo
                 //use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling
                 compatibilityJSON: 'v3',
 
-                lng: language,
-                fallbackLng: fallbackLanguage,
+                // no resource yet, set lng doesn't work here
+                // lng: loaderLang,
+                fallbackLng: loaderFallbackLang,
 
                 returnObjects: true,
                 missingKeyNoValueFallbackToKey: false,
@@ -89,18 +109,12 @@ export default function I18nProvider({ fallbackLanguage, language, translationLo
                 }
             })
         }
-        let loader = matchLoader(translationLoaders, language)
-        if (loader) {
-            const translation = loader()
+
+        Array.from(translations).forEach(([language, translation])=>{
             i18next.addResourceBundle(language, 'translation', translation, false, true)
-        }
-        if (fallbackLanguage && fallbackLanguage !== language) {
-            loader = matchLoader(translationLoaders, fallbackLanguage)
-            if (loader) {
-                const translation = loader()
-                i18next.addResourceBundle(fallbackLanguage, 'translation', translation, false, true)
-            }
-        }
+        })
+
+        i18next.changeLanguage(loaderLang)
 
         return i18next
     }, [fallbackLanguage, language, translationLoaders, i18nextInstance])
@@ -110,20 +124,25 @@ export default function I18nProvider({ fallbackLanguage, language, translationLo
     const setLanguage = useCallback((language: string) => {
         const loader = matchLoader(translationLoaders, language)
         if (loader) {
-            const translation = loader()
-            i18next.addResourceBundle(language, 'translation', loader(), false, true)
+            const loaderLang = loader[0]
+            i18next.addResourceBundle(loaderLang, 'translation', loader[1](), false, true)
+            i18next.changeLanguage(loaderLang)
+        }else{
+            i18next.changeLanguage(language)
         }
-        i18next.changeLanguage(language)
         setStateLanguage(language)
-    }, [i18next, translationLoaders])
+        if (onChangeLanguage) {
+            onChangeLanguage(language)
+        }
+    }, [i18next, translationLoaders, onChangeLanguage])
 
     const label = useCallback((key: string, args?: {}) => {
         return handleLabel(i18next, key, args)
     }, [i18next])
 
     const value = useMemo(() => {
-        return { language: stateLanguage, setLanguage, label, i18next } as I18nContextType
-    }, [stateLanguage, setLanguage, label, i18next])
+        return { language: stateLanguage, setLanguage, label, i18nextInstance: i18next, fallbackLanguage } as I18nContextType
+    }, [stateLanguage, setLanguage, label, i18next, fallbackLanguage])
 
     return <I18nContext.Provider value={value} >
         {children}

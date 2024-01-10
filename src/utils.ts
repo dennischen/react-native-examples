@@ -25,8 +25,8 @@ export function isLight() {
 
 export const select = Platform.select
 
-export const deviceLanguage: string | undefined =
-    iOS ?
+export function getDeviceLanguage(): string | undefined {
+    return iOS ?
         (NativeModules.SettingsManager.settings.AppleLocale ||
             NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
         ) : (
@@ -34,4 +34,6 @@ export const deviceLanguage: string | undefined =
                 ? NativeModules.I18nManager.localeIdentifier
                 : undefined
         )
+}
+
 

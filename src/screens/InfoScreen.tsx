@@ -2,7 +2,7 @@ import { appStyles } from '@/appStyles'
 import RerenderCounter from '@/components/RerenderCounter'
 import useI18n from '@/contexts/useI18n'
 import utilStyles from '@/utilStyles'
-import { deviceLanguage } from '@/utils'
+import { getDeviceLanguage } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import moment from 'moment/moment'
 import { useEffect, useMemo, useState } from 'react'
@@ -40,7 +40,7 @@ export default function Info(props: InfoScreenProps & Partial<NativeStackScreenP
         isTV: Platform.isTV,
         isTesting: Platform.isTesting,
         colorScheme: Appearance.getColorScheme(),
-        deviceLanguage: deviceLanguage
+        deviceLanguage: getDeviceLanguage()
     }
 
     return (
