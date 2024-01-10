@@ -25,7 +25,7 @@ export const appStyles = StyleSheet.create({
         padding: 4,
         borderWidth: 4,
         borderColor: '#f0f',
-    },
+    }
 })
 
 export default appStyles

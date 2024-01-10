@@ -46,6 +46,8 @@ export const screenList: Screen[] = [
     { name: 'networking', title: 'Networking', component: () => { return require('@/screens/NetworkingScreen').default } },
     { name: 'api', title: 'API', component: () => { return require('@/screens/APIScreen').default } },
     { name: 'i18n', title: 'I18n', component: () => { return require('@/screens/I18nScreen').default } },
+    { name: 'expo', title: 'Expo', component: () => { return require('@/screens/ExpoScreen').default } },
+    { name: 'components', title: 'Components', component: () => { return require('@/screens/ComponentsScreen').default } },
 ]
 
 if (android || iOS){//no web

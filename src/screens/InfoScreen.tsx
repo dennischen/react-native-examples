@@ -8,7 +8,6 @@ import moment from 'moment/moment'
 import { useEffect, useMemo, useState } from 'react'
 import { Appearance, Platform, Text, View } from 'react-native'
 
-
 export type InfoScreenProps = {
 }
 
