@@ -12,9 +12,10 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
-    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-async-storage/async-storage": "^1.18.2",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
+    "colord": "^2.9.1",
     "expo": "~49.0.15",
     "expo-image-picker": "~14.3.2",
     "expo-splash-screen": "~0.20.5",

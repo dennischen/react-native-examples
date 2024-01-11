@@ -3,12 +3,8 @@ import Button from '@/components/Button'
 import RerenderCounter from '@/components/RerenderCounter'
 import utilStyles from '@/utilStyles'
 import { web } from '@/utils'
-import FontAwesome from "@expo/vector-icons/FontAwesome"
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5"
-import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { launchImageLibraryAsync } from 'expo-image-picker'
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 
 const styles = StyleSheet.create({
     header: {
@@ -39,9 +35,9 @@ export default function ComponentsScreen(props: ComponentsScreenProps & Partial<
 
 
 function alert(msg: string, title: string = '') {
-    if(web && typeof window === 'object'){
+    if (web && typeof window === 'object') {
         (window as any).alert(msg)
-    }else{
+    } else {
         Alert.alert(title, msg)
     }
 }
@@ -55,13 +51,37 @@ function Buttons() {
         alert("onLongPress")
     }
 
-    return <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', padding: 8 }]}>
-        <Button label='Pick a picture' icon='picture-o' onPress={onPress} onLongPress={onLongPress} vibration={true}></Button>
-        <Button label='Pick a picture' theme='gery'></Button>
-        <Button icon='picture-o' theme='red'></Button>
-        <Button label='Pick a picture' icon='picture-o' iconPosition='right' theme='green'></Button>
-        <Button label='Pick a picture' icon='picture-o' iconPosition='top' theme='blue'></Button>
-        <Button label='Pick a picture' icon='picture-o' iconPosition='bottom' theme='blue'></Button>
+    return <View style={[utilStyles.vlayout, { gap: 4, padding: 8 }]}>
+        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', }]}>
+            <Button label='Save' onPress={onPress} onLongPress={onLongPress} vibration={true}></Button>
+            <Button icon='save' onPress={onPress} onLongPress={onLongPress} vibration={true}></Button>
+        </View>
+        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', }]}>
+            <Button label='Picture' icon='picture-o' ></Button>
+            <Button label='Picture' icon='picture-o' iconPosition='right'></Button>
+            <Button label='Picture' icon='picture-o' iconPosition='top'></Button>
+            <Button label='Picture' icon='picture-o' iconPosition='bottom'></Button>
+        </View>
+        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', }]}>
+            <Button label='Pick' icon='camera' ></Button>
+            <Button label='Pick' icon='camera' theme='gery'></Button>
+            <Button label='Pick' icon='camera' theme='red'></Button>
+            <Button label='Pick' icon='camera' theme='green'></Button>
+            <Button label='Pick' icon='camera' theme='blue'></Button>
+        </View>
+        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', }]}>
+            <Button label='Record' icon='microphone-slash' disabled></Button>
+            <Button label='Record' icon='microphone-slash' theme='gery' disabled></Button>
+            <Button label='Record' icon='microphone-slash' theme='red' disabled></Button>
+            <Button label='Record' icon='microphone-slash' theme='green' disabled></Button>
+            <Button label='Record' icon='microphone-slash' theme='blue' disabled></Button>
+        </View>
+        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', }]}>
+            <Button label="Save" icon='save' style={{ padding: 16 }} textStyle={{color: '#ff0', fontSize: 24}}></Button>
+            <Button icon='save' style={{ padding: 16 }} textStyle={{color: '#ff0', fontSize: 24}}></Button>
+            <Button label="Save" icon='save' style={{ padding: 16 }} textStyle={{color: '#ff0', fontSize: 24}} disabled></Button>
+            <Button icon='save' style={{ padding: 16 }} textStyle={{color: '#ff0', fontSize: 24}} disabled></Button>
+        </View>
 
     </View>
 }

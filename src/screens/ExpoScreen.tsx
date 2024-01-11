@@ -7,7 +7,8 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5"
 import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { launchImageLibraryAsync } from 'expo-image-picker'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { useCallback, useState } from 'react'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
 
 const styles = StyleSheet.create({
     header: {
@@ -60,7 +61,10 @@ function Icons() {
 }
 
 function ImagePicker() {
-    const pickImageAsync = async () => {
+
+    const [pictureUri, setPictureUri] = useState<string | undefined>(undefined)
+
+    const pickImageAsync = useCallback(async () => {
         let result = await launchImageLibraryAsync({
             allowsEditing: true,
             quality: 1,
@@ -70,14 +74,18 @@ function ImagePicker() {
             //Log entire result will get below warning
             //Key "cancelled" in the image picker result is deprecated and will be removed in SDK 48
             console.log("Result", result.assets)
+            setPictureUri(result.assets[0].uri)
         } else {
             alert('You did not select any image.')
         }
-    }
+    }, [])
 
-    return <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap' }]}>
-        <Button label='Pick a picture' icon='picture-o' onPress={pickImageAsync}></Button>
-
+    return <View style={[utilStyles.vlayout, { gap: 4, flexWrap: 'wrap' }]}>
+        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap' }]}>
+            <Button label='Pick a picture' icon='picture-o' onPress={pickImageAsync}></Button>
+            <Button label='Clear' onPress={() => setPictureUri(undefined)}></Button>
+        </View>
+        {pictureUri && <Image source={{ uri: pictureUri }} style={{ width: 100, height: 100 }}></Image>}
     </View>
 }
 

@@ -1,20 +1,23 @@
-import { android, web } from "@/utils"
+import { web } from "@/utils"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Animated, ImageStyle, Pressable, StyleSheet, Text, TextStyle, Vibration, View, ViewStyle } from "react-native"
+import { colord } from "colord"
 
 const styles = StyleSheet.create({
     button: {
-        borderRadius: 3,
-        borderWidth: 2,
-    },
-    buttonPressable: {
-        paddingVertical: 8,
-        paddingHorizontal: 8,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+
+        borderRadius: 3,
+        borderWidth: 2,
+        paddingVertical: 8,
+        paddingHorizontal: 8,
+
         gap: 8
+    },
+    buttonPressable: {
     },
     buttonIcon: {
     },
@@ -23,23 +26,18 @@ const styles = StyleSheet.create({
     },
 })
 
-type AllStyle = ViewStyle | TextStyle | ImageStyle
+type AllStyle = ViewStyle & TextStyle & ImageStyle
 
 type ButtonTheme = {
-    light?: boolean
     button?: AllStyle
     buttonPressable?: AllStyle
     buttonIcon?: AllStyle
     buttonLabel?: AllStyle
 }
 
-const greenTheme: ButtonTheme = StyleSheet.create({
-    button: {
-        backgroundColor: '#04AA6D',
-        borderColor: '#04AA6D'
-    },
-    buttonPressable: {
 
+const darkTheme: ButtonTheme = StyleSheet.create({
+    buttonPressable: {
     },
     buttonIcon: {
         color: 'white'
@@ -48,75 +46,65 @@ const greenTheme: ButtonTheme = StyleSheet.create({
         color: 'white'
     },
 })
-
-
-const blueTheme: ButtonTheme = StyleSheet.create({
-    button: {
-        backgroundColor: '#008CBA',
-        borderColor: '#008CBA'
-    },
+const lightTheme: ButtonTheme = StyleSheet.create({
     buttonPressable: {
-
     },
     buttonIcon: {
-        color: 'white'
+        color: 'black'
     },
     buttonLabel: {
-        color: 'white'
+        color: 'black'
     },
 })
 
-const redTheme: ButtonTheme = StyleSheet.create({
-    button: {
-        backgroundColor: '#f44336',
-        borderColor: '#f44336'
-    },
-    buttonPressable: {
-
-    },
-    buttonIcon: {
-        color: 'white'
-    },
-    buttonLabel: {
-        color: 'white'
-    },
-})
-
-const geryTheme: ButtonTheme = {
-    ...{
-        light: true,
-    }, ...StyleSheet.create({
+const greenTheme: ButtonTheme = {
+    ...darkTheme, ...StyleSheet.create({
         button: {
-            backgroundColor: '#e7e7e7',
-            borderColor: '#e7e7e7'
-        },
-        buttonPressable: {
-
-        },
-        buttonIcon: {
-            color: 'black'
-        },
-        buttonLabel: {
-            color: 'black'
-        },
+            backgroundColor: '#04AA6D',
+            borderColor: '#04AA6D'
+        }
     })
 }
 
-const blackTheme: ButtonTheme = StyleSheet.create({
-    button: {
-        backgroundColor: '#555555',
-        borderColor: '#555555'
-    },
-    buttonPressable: {
 
-    },
-    buttonIcon: {
-        color: 'white'
-    },
-    buttonLabel: {
-        color: 'white'
-    },
-})
+const blueTheme: ButtonTheme = {
+    ...darkTheme, ...StyleSheet.create({
+        button: {
+            backgroundColor: '#008CBA',
+            borderColor: '#008CBA'
+        },
+        buttonPressable: {
+
+        }
+    })
+}
+
+const redTheme: ButtonTheme = {
+    ...darkTheme, ...StyleSheet.create({
+        button: {
+            backgroundColor: '#f44336',
+            borderColor: '#f44336'
+        }
+    })
+}
+
+const geryTheme: ButtonTheme = {
+    ...lightTheme, ...StyleSheet.create({
+        button: {
+            backgroundColor: '#e7e7e7',
+            borderColor: '#e7e7e7'
+        }
+    })
+}
+
+const blackTheme: ButtonTheme = {
+    ...darkTheme, ...StyleSheet.create({
+        button: {
+            backgroundColor: '#555555',
+            borderColor: '#555555'
+        }
+    })
+}
 
 export type ButtonProps = {
     label?: string,
@@ -124,12 +112,15 @@ export type ButtonProps = {
     iconPosition?: 'right' | 'left' | 'top' | 'bottom'
     theme?: 'green' | 'blue' | 'red' | 'gery' | 'black'
     vibration?: boolean
+    disabled?: boolean
+    style?: ViewStyle
+    textStyle?: TextStyle
     onPress?: () => void
     onLongPress?: () => void
 }
 
 
-export default function Button({ label, icon, iconPosition = 'left', onPress, onLongPress, vibration, theme = 'black' }: ButtonProps) {
+export default function Button({ label, icon, iconPosition = 'left', disabled, onPress, onLongPress, vibration, style, textStyle, theme = 'black' }: ButtonProps) {
 
     const buttonTheme = useMemo(() => {
         switch (theme) {
@@ -148,27 +139,31 @@ export default function Button({ label, icon, iconPosition = 'left', onPress, on
     }, [theme])
 
 
-    const highlightAnim: Animated.Value = android ? undefined : useRef(new Animated.Value(1)).current as any
+    const pressedAnim = useRef(new Animated.Value(1)).current
 
     const onPressIn = useCallback(() => {
-        Animated.timing(highlightAnim, {
-            toValue: 0.8,
-            duration: 1,
+        Animated.spring(pressedAnim, {
+            toValue: 0.95,
+            speed: 1000,
+            bounciness: 100,
             useNativeDriver: !web
         }).start()
     }, [])
     const onPressOut = useCallback(() => {
-        highlightAnim.stopAnimation()
-        highlightAnim.setValue(1)
+        Animated.spring(pressedAnim, {
+            toValue: 1,
+            speed: 20,
+            useNativeDriver: !web
+        }).start()
     }, [])
 
-    // useEffect(() => {
-    //     Animated.timing(highlightAnim, {
-    //         toValue: 1,
-    //         duration: 10000,
-    //         useNativeDriver: !web
-    //     }).start()
-    // }, [highlightAnim])
+    useEffect(() => {
+        return () => {
+            if (pressedAnim) {
+                pressedAnim.stopAnimation()
+            }
+        }
+    }, [])
 
     const flexDirection = useMemo(() => {
         switch (iconPosition) {
@@ -185,36 +180,35 @@ export default function Button({ label, icon, iconPosition = 'left', onPress, on
     }, [iconPosition])
 
     return (
-        <Animated.View style={[styles.button, buttonTheme.button, {
-            opacity: highlightAnim,
-        }]}>
-            <Pressable
-                android_ripple={android ? {
-                    color: buttonTheme.light ? '#0002' : '#0005'
-                } : undefined}
-                onPressIn={android ? undefined : onPressIn}
-                onPressOut={android ? undefined : onPressOut}
-                style={[styles.buttonPressable, buttonTheme.buttonPressable, { flexDirection }]}
-                onPress={onPress ? () => {
-                    vibration && Vibration.vibrate(10)
-                    onPress()
-                } : undefined}
-                onLongPress={onLongPress ? () => {
-                    vibration && Vibration.vibrate(50)
-                    onLongPress()
-                } : undefined}
-            >
+        <Pressable
+            disabled={disabled}
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
+            style={[styles.buttonPressable, buttonTheme.buttonPressable]}
+            onPress={onPress ? () => {
+                vibration && Vibration.vibrate(10)
+                onPress()
+            } : undefined}
+            onLongPress={onLongPress ? () => {
+                vibration && Vibration.vibrate(50)
+                onLongPress()
+            } : undefined}
+        >
+            <Animated.View style={[styles.button, buttonTheme.button, style, { flexDirection }, disabled && {
+                opacity: 0.6,
+            }, {
+                transform: [{ scale: pressedAnim }]
+            }]}>
                 {icon && <FontAwesome
                     name={icon as any}
                     size={18}
-                    style={[styles.buttonIcon, buttonTheme.buttonIcon]}
+                    style={[styles.buttonIcon, buttonTheme.buttonIcon, textStyle]}
                 />}
                 {label &&
-                    <Text style={[styles.buttonLabel, buttonTheme.buttonLabel]}>
+                    <Text style={[styles.buttonLabel, buttonTheme.buttonLabel, textStyle]}>
                         {label}
                     </Text>}
-            </Pressable>
-
-        </Animated.View>
+            </Animated.View>
+        </Pressable>
     )
 }
