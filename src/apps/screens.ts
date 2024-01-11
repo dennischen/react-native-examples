@@ -46,11 +46,12 @@ export const screenList: Screen[] = [
     { name: 'networking', title: 'Networking', component: () => { return require('@/screens/NetworkingScreen').default } },
     { name: 'api', title: 'API', component: () => { return require('@/screens/APIScreen').default } },
     { name: 'i18n', title: 'I18n', component: () => { return require('@/screens/I18nScreen').default } },
+    { name: 'gesture', title: 'Gesture', component: () => { return require('@/screens/GestureScreen').default } },
     { name: 'expo', title: 'Expo', component: () => { return require('@/screens/ExpoScreen').default } },
     { name: 'components', title: 'Components', component: () => { return require('@/screens/ComponentsScreen').default } },
 ]
 
-if (android || iOS){//no web
+if (android || iOS) {//no web
     //Unable to resolve "react-native-web/dist/exports/DrawerLayoutAndroid"
     //https://github.com/expo/expo/issues/23322, can't work in build item with web
     // after switch to react-native-gesture-handler, it can pass the build, but gesture looks like has some bug in web, 
@@ -62,8 +63,8 @@ if (android || iOS){//no web
 if (android) {//android only
     screenList.push({ name: 'androidNative', title: 'Android Native', component: () => { return require('@/screens/AndroidNativeScreen').default } })
     screenList.push({ name: 'androidPermission', title: 'Android Permission', component: () => { return require('@/screens/AndroidPermissionScreen').default } })
-}else if (iOS){//ios only
-    
+} else if (iOS) {//ios only
+
 }
 
 export const screens: Map<string, Screen> = new Map(screenList.map((e) => [e.name, e]))

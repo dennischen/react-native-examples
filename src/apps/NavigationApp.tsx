@@ -10,6 +10,7 @@ import I18nProvider, { TranslationLoaders } from '@/contexts/I18nProvider'
 import { getDeviceLanguage, web } from '@/utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useRef, useState } from 'react'
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 type NavboxProps = NativeStackScreenProps<ScreenParamList>
 
@@ -31,9 +32,9 @@ export default function NavigationApp() {
     useEffect(() => {
         (async () => {
             const userLanguage: string = await AsyncStorage.getItem(USER_LANGUAGE) || getDeviceLanguage() || 'en'
-            setTimeout(()=>{
+            setTimeout(() => {
                 setInitLanguage(userLanguage)
-            },0)//2000 for test load delay
+            }, 0)//2000 for test load delay
         })()
     }, [])
 
@@ -84,24 +85,26 @@ function InitLoading() {
 function Navbox({ navigation, route }: NavboxProps) {
     const appName = process.env.EXPO_PUBLIC_APP_NAME
 
-    return <View style={appStyles.app}>
-        <Text>{appName} : Screen : {screens.get(route.name)?.title}</Text>
-        <View style={[utilStyles.hlayout, { padding: 4, gap: 4, flexWrap: 'wrap' }]}>
-            {new Array(...screens.values()).map((e) => <Button key={e.name} title={e.title}
-                onPress={() => {
-                    //reuse the screen (pop to it if it is in the hsitory)
-                    navigation.navigate(e.name as any, { from: route.name, time: new Date().getTime() })
+    return <GestureHandlerRootView style={appStyles.root}>
+        <View style={appStyles.app}>
+            <Text>{appName} : Screen : {screens.get(route.name)?.title}</Text>
+            <View style={[utilStyles.hlayout, { padding: 4, gap: 4, flexWrap: 'wrap' }]}>
+                {new Array(...screens.values()).map((e) => <Button key={e.name} title={e.title}
+                    onPress={() => {
+                        //reuse the screen (pop to it if it is in the hsitory)
+                        navigation.navigate(e.name as any, { from: route.name, time: new Date().getTime() })
 
-                    //always always push a new screen 
-                    // navigation.push(e.name as any, { from: route.name, time: new Date().getTime() })
-                }}
-            />)}
+                        //always always push a new screen 
+                        // navigation.push(e.name as any, { from: route.name, time: new Date().getTime() })
+                    }}
+                />)}
+            </View>
+            {(() => {
+                const CO = screens.get(route.name)?.component()
+                return CO && <CO navigation={navigation} route={route} {...route.params} />
+            })()}
         </View>
-        {(() => {
-            const CO = screens.get(route.name)?.component()
-            return CO && <CO navigation={navigation} route={route} {...route.params} />
-        })()}
-    </View>
+    </GestureHandlerRootView>
 }
 
 

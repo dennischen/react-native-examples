@@ -8,7 +8,9 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons"
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { launchImageLibraryAsync } from 'expo-image-picker'
 import { useCallback, useState } from 'react'
-import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 
 const styles = StyleSheet.create({
     header: {
@@ -17,8 +19,8 @@ const styles = StyleSheet.create({
     },
     scroll: {
         backgroundColor: '#0f0',
-        borderWidth: 2,
-        borderColor: '#ff0',
+        borderWidth: 4,
+        borderColor: '#555',
         width: '100%'
     }
 })
@@ -33,9 +35,8 @@ export default function ExpoScreen(props: ExpoScreenProps & Partial<NativeStackS
     return (
         <View style={appStyles.screen}>
             <RerenderCounter />
-            <ScrollView style={styles.scroll} contentContainerStyle={{ alignItems: 'center', gap: 8 }}>
+            <ScrollView style={styles.scroll} contentContainerStyle={{ alignItems: 'center', gap: 8, flex: 1 }}>
                 <Icons />
-                <ImagePicker />
             </ScrollView>
         </View>
     )
@@ -60,34 +61,5 @@ function Icons() {
     </View>
 }
 
-function ImagePicker() {
 
-    const [pictureUri, setPictureUri] = useState<string | undefined>(undefined)
-
-    const pickImageAsync = useCallback(async () => {
-        let result = await launchImageLibraryAsync({
-            allowsEditing: true,
-            quality: 1,
-        })
-
-        if (!result.canceled) {
-            //Log entire result will get below warning
-            //Key "cancelled" in the image picker result is deprecated and will be removed in SDK 48
-            console.log("Result", result.assets)
-            setPictureUri(result.assets[0].uri)
-        } else {
-            alert('You did not select any image.')
-        }
-    }, [])
-
-    return <View style={[utilStyles.vlayout, { gap: 4, flexWrap: 'wrap' }]}>
-        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap' }]}>
-            <Button label='Pick a picture' icon='picture-o' onPress={pickImageAsync}></Button>
-            <Button label='Clear' onPress={() => setPictureUri(undefined)}></Button>
-        </View>
-        {pictureUri && <Image source={{ uri: pictureUri }} style={{ width: 100, height: 100 }}></Image>}
-    </View>
-}
-
-
-console.log(">>>>Loaded APIScreen")
+console.log(">>>>Loaded ExpoScreen")

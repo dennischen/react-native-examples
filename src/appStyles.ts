@@ -4,6 +4,12 @@ import { StatusBar, StyleSheet } from "react-native"
  * application styles
  */
 export const appStyles = StyleSheet.create({
+    root: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        justifyContent: 'flex-start',
+    },
     app: {
         flex: 1,
         flexDirection: 'column',
