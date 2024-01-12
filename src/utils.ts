@@ -1,4 +1,4 @@
-import { Appearance, NativeModules, Platform } from "react-native"
+import { Alert, Appearance, NativeModules, Platform } from "react-native"
 
 
 export const web = Platform.OS === 'web'
@@ -37,3 +37,13 @@ export function getDeviceLanguage(): string | undefined {
 }
 
 
+export function alert(msg: string, title: string = '') {
+    if (web && typeof window === 'object') {
+        //simulate non-block of Alert.alert
+        setTimeout(() => {
+            (window as any).alert(msg)
+        }, 1)
+    } else {
+        Alert.alert(title, msg)
+    }
+}

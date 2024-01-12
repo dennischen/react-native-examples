@@ -74,6 +74,7 @@ export default function DrawerLayoutScreen(props: DrawerLayoutScreenProps & Part
             <GestureHandlerRootView style={{ width: '100%', flex: 1 }} >
                 <DrawerLayout
                     ref={drawer}
+                    useNativeAnimations={!web}
                     drawerWidth={300}
                     drawerPosition={drawerPosition}
                     renderNavigationView={navigationView}

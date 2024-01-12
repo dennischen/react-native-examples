@@ -1,7 +1,7 @@
 import { appStyles } from '@/appStyles'
 import RerenderCounter from '@/components/RerenderCounter'
 import utilStyles from '@/utilStyles'
-import { android } from '@/utils'
+import { alert, android } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, AppState, BackHandler, Button, Dimensions, Linking, PixelRatio, ScrollView, Share, StyleSheet, Text, Vibration, View } from 'react-native'
@@ -72,7 +72,7 @@ export default function APIScreen(props: APIScreenProps & Partial<NativeStackScr
             // by some browser in the mobile
             await Linking.openURL(url)
         } else {
-            Alert.alert(`Don't know how to open this URL: ${url}`)
+            alert(`Don't know how to open this URL: ${url}`)
         }
     }, [])
 
@@ -89,7 +89,7 @@ export default function APIScreen(props: APIScreenProps & Partial<NativeStackScr
                 console.log("Dismissed ")
             }
         } catch (error: any) {
-            Alert.alert(error.message)
+            alert(error.message)
         }
     }, [])
 

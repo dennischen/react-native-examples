@@ -1,6 +1,6 @@
 import { appStyles } from '@/appStyles'
 import RerenderCounter from '@/components/RerenderCounter'
-import { android } from '@/utils'
+import { alert, android } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import {
     Alert,
@@ -35,11 +35,11 @@ export default function TouchableScreen(props: TouchableScreenProps & Partial<Na
     // console.log("Touchable>>", props)
 
     const onPressButton = () => {
-        Alert.alert('You tapped the button!')
+        alert('You tapped the button!')
     }
 
     const onLongPressButton = () => {
-        Alert.alert('You long-pressed the button!')
+        alert('You long-pressed the button!')
     }
 
     return (

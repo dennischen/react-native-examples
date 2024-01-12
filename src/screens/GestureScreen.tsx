@@ -4,10 +4,14 @@ import RerenderCounter from '@/components/RerenderCounter'
 import utilStyles from '@/utilStyles'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { launchImageLibraryAsync } from 'expo-image-picker'
-import { useCallback, useState } from 'react'
-import { Image, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { useCallback, useRef, useState } from 'react'
+import { Alert, Image, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+import { createAssetAsync, saveToLibraryAsync, usePermissions as useMediaPermission } from 'expo-media-library'
+import { captureRef } from 'react-native-view-shot'
+import { alert, web } from '@/utils'
+import domtoimage from 'dom-to-image'
 
 const styles = StyleSheet.create({
     header: {
@@ -23,30 +27,28 @@ const styles = StyleSheet.create({
 })
 
 
+
 export type GestureScreenProps = {}
 
 export default function GestureScreen(props: GestureScreenProps & Partial<NativeStackScreenProps<any>>) {
-    return (
-        <View style={appStyles.screen}>
-            <RerenderCounter />
-            <ScrollView style={styles.scroll} contentContainerStyle={{ alignItems: 'center', gap: 8, flex: 1 }}>
-                <ImagePicker />
-            </ScrollView>
-        </View>
-    )
-}
-
-function ImagePicker() {
 
     const windowDim = useWindowDimensions()
 
     const [picture, setPicture] = useState<{ uri: string, width: number, height: number } | undefined>(undefined)
 
+    const viewRef = useRef<View>(null)
+
+    const [mediaPermission, requestMediaPermission] = useMediaPermission()
+
+    console.log(">>>", mediaPermission)
+
     const pickImageAsync = useCallback(async () => {
+
         let result = await launchImageLibraryAsync({
             allowsEditing: true,
             quality: 1,
         })
+        //no return in web if user cancel it
 
         if (!result.canceled) {
             //Log entire result will get below warning
@@ -68,19 +70,71 @@ function ImagePicker() {
         }
     }, [windowDim])
 
-    return <View style={[utilStyles.vlayout, { alignItems: 'stretch', gap: 4, width: '100%', borderWidth: 4, borderColor: '#00f', minHeight: 400 }]}>
-        <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', justifyContent: 'center', borderWidth: 2, borderColor: '#f00' }]}>
-            <Button label='Pick a picture' icon='picture-o' onPress={pickImageAsync}></Button>
-            <Button label='Clear' onPress={() => setPicture(undefined)}></Button>
-        </View>
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            {picture && <AniImage
-                uri={picture.uri}
-                width={picture.width}
-                height={picture.height} />}
-        </View>
+    const onSavePicture = useCallback(async () => {
 
-    </View>
+        if (web) {
+            try {
+                if (viewRef.current) {
+                    const dataUrl = await domtoimage.toPng(viewRef.current as any as Node, {
+                        quality: 1
+                    })
+
+                    let link = document.createElement('a')
+                    link.download = 'sticker-smash.png'
+                    link.href = dataUrl
+                    link.click()
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        } else {
+            let permission = mediaPermission
+            if (!permission || (!permission.granted && permission.canAskAgain)) {
+                permission = await requestMediaPermission()
+            }
+            if (permission.granted) {
+                try {
+                    //file cached in file:///data/user/0/host.exp.exponent/cache/ExperienceData/.....
+                    const localUri = await captureRef(viewRef, {
+                        quality: 1,
+                    })
+
+                    //save file to device's media directory
+                    await saveToLibraryAsync(localUri)
+
+                    if (localUri) {
+                        alert(`Saved! ${localUri}`)
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+
+            } else {
+                alert(`No permission to save picture ${JSON.stringify(permission)}`)
+            }
+        }
+    }, [picture, mediaPermission])
+
+    return (
+        <View style={appStyles.screen}>
+            <RerenderCounter />
+            <View style={[utilStyles.vlayout, { flex: 1, alignItems: 'stretch', gap: 4, width: '100%', borderWidth: 4, borderColor: '#00f' }]}>
+                <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', justifyContent: 'center', borderWidth: 2, borderColor: '#f00' }]}>
+                    <Button label='Pick a picture' icon='picture-o' onPress={pickImageAsync}></Button>
+                    <Button label='Save' onPress={onSavePicture}></Button>
+                    <Button label='Clear' onPress={() => setPicture(undefined)}></Button>
+                </View>
+                <View ref={viewRef} collapsable={false}
+                    style={{ flex: 1, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    {picture && <AniImage
+                        uri={picture.uri}
+                        width={picture.width}
+                        height={picture.height} />}
+                </View>
+
+            </View>
+        </View>
+    )
 }
 
 function AniImage({ uri, width, height }: { uri: string, width: number, height: number }) {

@@ -2,9 +2,9 @@ import { appStyles } from '@/appStyles'
 import Button from '@/components/Button'
 import RerenderCounter from '@/components/RerenderCounter'
 import utilStyles from '@/utilStyles'
-import { web } from '@/utils'
+import { alert } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Alert, ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 const styles = StyleSheet.create({
     header: {
@@ -31,15 +31,6 @@ export default function ComponentsScreen(props: ComponentsScreenProps & Partial<
             </ScrollView>
         </View>
     )
-}
-
-
-function alert(msg: string, title: string = '') {
-    if (web && typeof window === 'object') {
-        (window as any).alert(msg)
-    } else {
-        Alert.alert(title, msg)
-    }
 }
 
 function Buttons() {

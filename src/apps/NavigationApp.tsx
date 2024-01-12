@@ -4,13 +4,15 @@ import { NavigationContainer } from '@react-navigation/native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
-import { ActivityIndicator, Animated, Button, Text, View } from 'react-native'
+import { ActivityIndicator, Animated, Button, Text, View, useWindowDimensions } from 'react-native'
 import screens, { ScreenParamList } from './screens'
 import I18nProvider, { TranslationLoaders } from '@/contexts/I18nProvider'
 import { getDeviceLanguage, web } from '@/utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useEffect, useRef, useState } from 'react'
-import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler"
+import ScrollScreen from '@/screens/ScrollScreen'
+import { RootSiblingParent } from 'react-native-root-siblings'
 
 type NavboxProps = NativeStackScreenProps<ScreenParamList>
 
@@ -27,7 +29,6 @@ const translationLoaders: TranslationLoaders = {
 export default function NavigationApp() {
 
     const [initLanguage, setInitLanguage] = useState<string | undefined>()
-
 
     useEffect(() => {
         (async () => {
@@ -85,26 +86,31 @@ function InitLoading() {
 function Navbox({ navigation, route }: NavboxProps) {
     const appName = process.env.EXPO_PUBLIC_APP_NAME
 
-    return <GestureHandlerRootView style={appStyles.root}>
-        <View style={appStyles.app}>
-            <Text>{appName} : Screen : {screens.get(route.name)?.title}</Text>
-            <View style={[utilStyles.hlayout, { padding: 4, gap: 4, flexWrap: 'wrap' }]}>
-                {new Array(...screens.values()).map((e) => <Button key={e.name} title={e.title}
-                    onPress={() => {
-                        //reuse the screen (pop to it if it is in the hsitory)
-                        navigation.navigate(e.name as any, { from: route.name, time: new Date().getTime() })
+    const wd = useWindowDimensions()
+    return <RootSiblingParent>
+        <GestureHandlerRootView style={appStyles.root}>
+            <View style={appStyles.app}>
+                <Text>{appName} : Screen : {screens.get(route.name)?.title}</Text>
+                <ScrollView style={{ flexGrow: 0, maxHeight: wd.height / 4 }}>
+                    <View style={[utilStyles.hlayout, { padding: 4, gap: 4, flexWrap: 'wrap' }]}>
+                        {new Array(...screens.values()).map((e) => <Button key={e.name} title={e.title}
+                            onPress={() => {
+                                //reuse the screen (pop to it if it is in the hsitory)
+                                navigation.navigate(e.name as any, { from: route.name, time: new Date().getTime() })
 
-                        //always always push a new screen 
-                        // navigation.push(e.name as any, { from: route.name, time: new Date().getTime() })
-                    }}
-                />)}
+                                //always always push a new screen 
+                                // navigation.push(e.name as any, { from: route.name, time: new Date().getTime() })
+                            }}
+                        />)}
+                    </View>
+                </ScrollView>
+                {(() => {
+                    const CO = screens.get(route.name)?.component()
+                    return CO && <CO navigation={navigation} route={route} {...route.params} />
+                })()}
             </View>
-            {(() => {
-                const CO = screens.get(route.name)?.component()
-                return CO && <CO navigation={navigation} route={route} {...route.params} />
-            })()}
-        </View>
-    </GestureHandlerRootView>
+        </GestureHandlerRootView>
+    </RootSiblingParent>
 }
 
 
