@@ -2,15 +2,9 @@ import { appStyles } from '@/appStyles'
 import RerenderCounter from '@/components/RerenderCounter'
 import { iOS } from '@/utils'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useCallback, useState } from 'react'
-import { FlatList, Pressable, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import {
-    Button,
-    Platform,
-    SafeAreaView,
-    StatusBar,
-} from 'react-native'
+import { useState } from 'react'
 import type { StatusBarStyle } from 'react-native'
+import { Button, StatusBar, StyleSheet, Text, View } from 'react-native'
 
 const STYLES = ['default', 'dark-content', 'light-content'] as const
 const TRANSITIONS = ['fade', 'slide', 'none'] as const

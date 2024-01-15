@@ -49,6 +49,7 @@ export const screenList: Screen[] = [
     { name: 'gesture', title: 'Gesture', component: () => { return require('@/screens/GestureScreen').default } },
     { name: 'icons', title: 'Icons', component: () => { return require('@/screens/IconsScreen').default } },
     { name: 'components', title: 'Components', component: () => { return require('@/screens/ComponentsScreen').default } },
+    { name: 'storage', title: 'Storage', component: () => { return require('@/screens/StorageScreen').default } },
 ]
 
 if (android || iOS) {//no web

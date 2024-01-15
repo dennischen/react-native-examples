@@ -38,6 +38,7 @@ export function getDeviceLanguage(): string | undefined {
 
 
 export function alert(msg: string, title: string = '') {
+    console.log(`${msg}${title?` ${title}`:''}`)
     if (web && typeof window === 'object') {
         //simulate non-block of Alert.alert
         setTimeout(() => {
