@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import { alert, android, web } from '@/utils'
+import { getInfo, readAsStringAsync, requestExternalDirectoryPermission, writeAsStringAsync } from '@/android'
 
 
 const styles = StyleSheet.create({
@@ -89,13 +90,11 @@ export default function StorageScreen(props: StorageScreenProps & Partial<Native
                     <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', justifyContent: 'center' }]}>
                         <Button label='Save to file' onPress={async () => {
                             const fileInfo = await FileSystem.getInfoAsync(file3Uri)
-                            console.log(">>>>>>>", fileInfo)
                             await FileSystem.writeAsStringAsync(file3Uri, value3)
                             alert(`Wrote ${value3} to file ${file3Uri}`)
                         }}></Button>
                         <Button label='Load from file' onPress={async () => {
                             const fileInfo = await FileSystem.getInfoAsync(file3Uri)
-                            console.log(">>>>>>>", fileInfo)
                             if (fileInfo.exists && !fileInfo.isDirectory) {
                                 setValue3(await FileSystem.readAsStringAsync(file3Uri))
                             } else {
@@ -105,80 +104,41 @@ export default function StorageScreen(props: StorageScreenProps & Partial<Native
                     </View>
                 </View>}
                 {android && <View style={[utilStyles.vlayout, { gap: 4, alignItems: 'stretch' }]}>
-                    <Text>externalDir : {externalDir}, {StorageAccessFramework.getUriForDirectoryInRoot(externalDir)}</Text>
+                    <Text>externalDir : {externalDir}</Text>
                     <TextInput value={value4} style={styles.textbox} onChangeText={(text) => setValue4(text)}></TextInput>
                     <View style={[utilStyles.hlayout, { gap: 4, flexWrap: 'wrap', justifyContent: 'center' }]}>
                         <Button label='Save to external' onPress={async () => {
 
+                            const permission = await requestExternalDirectoryPermission(externalDir)
+                            if (permission.granted) {
+                                await AsyncStorage.setItem("externalDir", permission.directory)
+                                setExternalDir(permission.directory)
 
-                            const requestPermission = async () => {
-                                const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync(StorageAccessFramework.getUriForDirectoryInRoot('my-expo-test'))
-                                let externalDir = ''
-                                if (permissions.granted) {
-                                    const dirUri = permissions.directoryUri
-                                    //from the "primary:", where : is %3A
-                                    const idx = dirUri.lastIndexOf('%3A')
-                                    if (idx) {
-                                        externalDir = permissions.directoryUri.substring(idx + 3)
-                                        await AsyncStorage.setItem("externalDir", externalDir)
-                                        setExternalDir(externalDir)
-                                        console.log(`set directory to ${externalDir}`)
-                                    }
-                                }
-                                return {
-                                    granted: permissions.granted,
-                                    externalDir
-                                }
-                            }
+                                await writeAsStringAsync(permission.directory, "value4.txt", value4)
 
-                            let externalDirUri
-                            let permission: { granted: boolean, externalDir: string } | undefined = undefined
-                            if (externalDir) {
-                                externalDirUri = StorageAccessFramework.getUriForDirectoryInRoot(externalDir)
-                                let info
-                                try {
-                                    //check permission again by access it with FileSystem
-                                    info = await FileSystem.getInfoAsync(externalDirUri)
-                                } catch (err) { }
+                                alert(`Wrote ${value4} to external ${permission.directory}/ file`)
 
-                                //the isDirectory is always false by my test
-                                console.log(`Dir Info ${JSON.stringify(info)}`)
-                                if (!info || !info.exists) {
-                                    //request again
-                                    if (!(permission = await requestPermission()).granted) {
-                                        alert(`No directory access permission`)
-                                        return
-                                    }
-                                }
                             } else {
-                                if (!(permission = await requestPermission()).granted) {
-                                    alert(`No directory access permission`)
-                                    return
-                                }
-                                externalDirUri = StorageAccessFramework.getUriForDirectoryInRoot(permission.externalDir)
-                            }
-
-
-                            const fileName = "value4y.txt"
-
-                            try {
-                                const fileUri = externalDirUri + encodeURIComponent(`/${fileName}`)
-                                //will throw exception if file not found
-                                let info = await FileSystem.getInfoAsync(fileUri)
-                                //the existed and directory is not trustable
-                                await FileSystem.writeAsStringAsync(fileUri, value4)
-                                alert(`Wrote ${value4} to external ${fileUri}`)
-
-                            } catch (err) {
-                                //create then save for the not found case
-                                //create a existed file will cause StorageAccessFramework append filename (index).ext to file
-                                const fileUri = await StorageAccessFramework.createFileAsync(externalDirUri, fileName, "text/plain")
-                                await FileSystem.writeAsStringAsync(fileUri, value4)
-                                alert(`Create & Wrote ${value4} to external ${fileUri}`)
+                                alert(`No directory access permission`)
                             }
                         }}></Button>
                         <Button label='Load from external' onPress={async () => {
+                            const permission = await requestExternalDirectoryPermission(externalDir)
+                            if (permission.granted) {
+                                await AsyncStorage.setItem("externalDir", permission.directory)
+                                setExternalDir(permission.directory)
 
+                                const info = await getInfo(permission.directory, "value4.txt")
+
+                                if(info.exists){
+                                    setValue4(await readAsStringAsync(permission.directory, "value4.txt"))
+                                }else{
+                                    alert(`No file at ${info.directory}/${info.file}`)
+                                }
+
+                            } else {
+                                alert(`No directory access permission`)
+                            }
 
                         }}></Button>
                     </View>
