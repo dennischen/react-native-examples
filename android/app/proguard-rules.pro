@@ -12,3 +12,6 @@
 -keep class com.facebook.react.turbomodule.** { *; }
 
 # Add any project specific keep options here:
+
+# Check if this is required (The realm official react-native says required, but not found in it's templates code)
+#-keep class io.realm.react.**

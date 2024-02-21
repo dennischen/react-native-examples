@@ -11,23 +11,28 @@ cd ./android/app/
 keytool -genkeypair -v -storetype PKCS12 -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-Edit the `~/.gradle/gradle.properties` with the password
+Edit the `~/.gradle/gradle.properties` (USER_HOME) with the correct password
 ```
 MYAPP_RELEASE_STORE_PASSWORD=*****
 MYAPP_RELEASE_KEY_PASSWORD=*****
 ```
 
-Read `~/android/app/build.gradle` and `~/android/gradle.properties`, search MYAPP_ for detail
+Read `./android/app/build.gradle` and `./android/gradle.properties`, search MYAPP_ for detail
 
 ## Assemble the release apk
-Use following command to release apk in `.\android\app\build\outputs\apk\release\app-release.apk`
+Use following command to release apk
 
 ```
 cd android
+
+# In Windows
+gradlew.bat assembleRelease
+# In iOS
 ./gradlew assembleRelease
 ```
+The apk is located at `.\android\app\build\outputs\apk\release\app-release.apk`
 
-Install the the apk 
+## Install the the apk 
 ```
 adb connect ip[:port] # connect to wifi debug-on device
 adb devices
@@ -39,5 +44,10 @@ Use following command to release aab in `.\android\app\build\outputs\bundle\rele
 
 ```
 cd android
+
+# In Windows
+gradlew.bat bundleRelease
+# In iOS
 ./gradlew bundleRelease
+
 ```

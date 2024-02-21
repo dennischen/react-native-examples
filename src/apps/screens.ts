@@ -64,6 +64,8 @@ if (android || iOS) {//no web
     screenList.push({ name: 'drawerLayout', title: 'Drawer Layout', component: () => { return require('@/screens/DrawerLayoutScreen').default } })
 
     screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return require('@/screens/KeyboardAvoidingScreen').default } })
+
+    screenList.push({ name: 'realm', title: 'Reaml', component: () => { return require('@/screens/RealmScreen').default } })
 }
 if (android) {//android only
     screenList.push({ name: 'androidNative', title: 'Android Native', component: () => { return require('@/screens/AndroidNativeScreen').default } })
