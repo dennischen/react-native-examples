@@ -32,7 +32,7 @@
             //'metro' also fix require images too
 
             //https://github.com/expo/expo/issues/23104
-            //fix by add import "@expo/metro-runtime"; in appEntry.sj
+            //fix by add import "@expo/metro-runtime"; in appEntry.js
             "bundler": "metro"
         }
     }

@@ -1,7 +1,13 @@
 const path = require("path")
 
 const shimModuleRegexs = {
-    'web': [/^react-native-web\/.*Android$/]
+    //ignore to build(include) in web
+    'web': [
+        /**
+         * Unable to resolve "react-native-web/dist/exports/PermissionsAndroid" from "src\screens\AndroidPermissionScreen.tsx"
+         */
+        /^react-native-web\/.*Android$/,
+    ]
 }
 
 function shouldResolve(moduleName, platform) {

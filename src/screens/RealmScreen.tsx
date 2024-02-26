@@ -9,6 +9,8 @@ import { RealmProvider, useQuery, useRealm } from '@realm/react'
 import { useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
+import * as FileSystem from 'expo-file-system'
+import { StorageAccessFramework } from "expo-file-system"
 
 const styles = StyleSheet.create({
     textbox: {
@@ -31,6 +33,8 @@ export function RealmScreen(props: RealmScreenProps & Partial<NativeStackScreenP
     const realm = useRealm()
     const tasks = useQuery(Task)
 
+    console.log(">>>>>>>>>>>>>>")
+    console.log(">>>>Realm.path", realm.path)
 
     return (
         <View style={[appStyles.screen, { gap: 8, alignItems: 'stretch' }]}>
@@ -52,7 +56,7 @@ export function RealmScreen(props: RealmScreenProps & Partial<NativeStackScreenP
                     </View>
                     {tasks?.length > 0 && <View style={[utilStyles.vlayout, { gap: 4 }]}>
                         {tasks.map((task) => {
-                            console.log(">>", task)
+                            // console.log(">>", task, task._id, task._id.toString(), task.description)
                             return <View key={task._id.toString()} style={[utilStyles.hlayout, { gap: 4 }]}>
                                 <Text style={{ flexGrow: 1 }}>{task.description}</Text>
                                 <Pressable onPress={() => {
@@ -80,8 +84,14 @@ export function RealmScreen(props: RealmScreenProps & Partial<NativeStackScreenP
 }
 
 export default function RealmScreenWrap(props: RealmScreenProps & Partial<NativeStackScreenProps<any>>) {
+    console.log(">>>>>>>>>>>>>>")
+    console.log(">>>>FileSystem.bundleDirectory", FileSystem.bundleDirectory)
+    console.log(">>>>FileSystem.cacheDirectory", FileSystem.cacheDirectory)
+    console.log(">>>>FileSystem.documentDirectory", FileSystem.documentDirectory)
+    const path = FileSystem.documentDirectory?.startsWith('file://') ? FileSystem.documentDirectory.substring(7) + 'test-a.realm' : undefined
+    console.log(">>>>path", path)
     return (
-        <RealmProvider schema={[Task]}><RealmScreen {...props} /></RealmProvider>
+        <RealmProvider path={path} schema={[Task]}><RealmScreen {...props} /></RealmProvider>
     )
 }
 

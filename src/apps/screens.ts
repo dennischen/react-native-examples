@@ -60,11 +60,16 @@ if (android || iOS) {//no web
     //Unable to resolve "react-native-web/dist/exports/DrawerLayoutAndroid"
     //https://github.com/expo/expo/issues/23322, can't work in build item with web
     // after switch to react-native-gesture-handler, it can pass the build, but gesture looks like has some bug in web, 
-    // so disable it 
+    // has disable it in when building web 
     screenList.push({ name: 'drawerLayout', title: 'Drawer Layout', component: () => { return require('@/screens/DrawerLayoutScreen').default } })
 
     screenList.push({ name: 'keyboardAvoiding', title: 'Keyboard Avoiding', component: () => { return require('@/screens/KeyboardAvoidingScreen').default } })
 
+
+    //The package at "node_modules\realm\dist\bundle.node.js" attempted to import the Node standard library module "node:fs".        
+    //It failed because the native React runtime does not include the Node standard library.
+    //Learn more: https://docs.expo.dev/workflow/using-libraries/#using-third-party-libraries        
+    // has disable it in when building web
     screenList.push({ name: 'realm', title: 'Reaml', component: () => { return require('@/screens/RealmScreen').default } })
 }
 if (android) {//android only
@@ -76,4 +81,6 @@ if (android) {//android only
 
 export const screens: Map<string, Screen> = new Map(screenList.map((e) => [e.name, e]))
 
+
+console.log(">>>>>screens", screens)
 export default screens
